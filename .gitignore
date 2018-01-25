@@ -3,3 +3,6 @@
 *.xlsx
 tables
 mxtables
+build
+dist
+main.spec
