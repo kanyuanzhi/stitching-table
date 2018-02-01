@@ -2,7 +2,8 @@
 *.xls
 *.xlsx
 tables
+two_tables
 mxtables
 build
 dist
-main.spec
+*.spec

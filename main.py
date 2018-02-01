@@ -5,7 +5,8 @@ import getpass
 import os
 
 user = getpass.getuser()
-tablePath = 'C:/Users/' + user + '/Desktop/tables/'
+# tablePath = 'C:/Users/' + user + '/Desktop/tables/'
+tablePath = 'tables/'
 fileNames = os.listdir(tablePath)
 tableNames = []
 
@@ -29,6 +30,8 @@ for name in tableNames:
             nameToMatrixProcessed[name][i][j] = nameToTable[name].cell(i + 2, j).value
         nameToMatrixProcessed[name][i].append(projectCode)
         nameToMatrixProcessed[name][i].append(projectName)
+    if nameToMatrixProcessed[name][rows_count - 3][0] == u'合计':
+        nameToMatrixProcessed[name].pop()
 
 ##################################################################
 # 处理表头
