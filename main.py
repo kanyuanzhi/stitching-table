@@ -4,6 +4,7 @@ import xlwt
 import getpass
 import os
 
+
 user = getpass.getuser()
 # tablePath = 'C:/Users/' + user + '/Desktop/tables/'
 tablePath = 'tables/'
@@ -16,18 +17,21 @@ for name in fileNames:
         tableNames.append(name)
 
 nameToTable = dict.fromkeys(tableNames)
-nameToMatrixProcessed = dict.fromkeys(tableNames)  # 处理后表格，添加项目代码与项目名称字段，删除前两行表头
+nameToMatrixProcessed = dict.fromkeys(
+    tableNames)  # 处理后表格，添加项目代码与项目名称字段，删除前两行表头
 
 for name in tableNames:
     nameToTable[name] = xlrd.open_workbook(tablePath + name).sheet_by_index(0)
     cols_count = nameToTable[name].ncols
     rows_count = nameToTable[name].nrows
-    nameToMatrixProcessed[name] = [["" for i in range(cols_count)] for j in range(rows_count - 2)]
+    nameToMatrixProcessed[name] = [
+        ["" for i in range(cols_count)] for j in range(rows_count - 2)]
     projectCode = nameToTable[name].cell(0, 1).value  # 项目代码
     projectName = nameToTable[name].cell(0, 3).value  # 项目名称
     for i in range(rows_count - 2):
         for j in range(cols_count):
-            nameToMatrixProcessed[name][i][j] = nameToTable[name].cell(i + 2, j).value
+            nameToMatrixProcessed[name][i][j] = nameToTable[name].cell(
+                i + 2, j).value
         nameToMatrixProcessed[name][i].append(projectCode)
         nameToMatrixProcessed[name][i].append(projectName)
     if nameToMatrixProcessed[name][rows_count - 3][0] == u'合计':
