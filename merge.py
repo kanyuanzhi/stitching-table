@@ -1,28 +1,44 @@
 # -*- coding: UTF-8 -*-
-import xlrd
-import xlwt
-import getpass
-import os
+from xlrd import open_workbook
+from xlwt import Workbook
+from getpass import getuser
+from os import listdir
 
-user = getpass.getuser()
-# tablePath = 'C:/Users/' + user + '/Desktop/two_tables/'
-tablePath = 'two_tables/'
-fileNames = os.listdir(tablePath)
+
+def codeChange(itemCode, dictionary):
+    if itemCode in dictionary:
+        return dictionary[itemCode]
+    else:
+        return "-"
+
+
+user = getuser()
+tablePath = 'C:/Users/' + user + '/Desktop/two_tables/'
+# tablePath = 'two_tables/'
+fileNames = listdir(tablePath)
 
 nameToTable = []
 nameToMatrix = []
 
-nameToTable.append(xlrd.open_workbook(tablePath + '明细.xls').sheet_by_index(0))
-nameToTable.append(xlrd.open_workbook(tablePath + '预算.xls').sheet_by_index(0))
-nameToTable.append(xlrd.open_workbook(tablePath + '分项代码转换表.xls').sheet_by_index(0))
+nameToTable.append(open_workbook(tablePath + u'明细.xls').sheet_by_index(0))
+nameToTable.append(open_workbook(tablePath + u'预算.xls').sheet_by_index(0))
+nameToTable.append(open_workbook(tablePath + u'分项代码转换表.xls').sheet_by_index(0))
 
 ##############处理分项代码转换表###################
+cols_count = nameToTable[2].ncols
+rows_count = nameToTable[2].nrows
+codeChangeTable = [["" for i in range(cols_count)] for j in range(rows_count)]
+for i in range(rows_count - 1):
+    for j in range(cols_count):
+        codeChangeTable[i][j] = nameToTable[2].cell(i + 1, j).value
 
-codeChangeTable = []
+codeChangeKey = []
+codeChangeValue = []
+for row in codeChangeTable:
+    codeChangeKey.append(row[0])
+    codeChangeValue.append(row[2])
 
-
-
-
+codeChangeDictionary = dict(zip(codeChangeKey, codeChangeValue))
 
 ################################
 
@@ -62,12 +78,12 @@ for j in range(len(nameToMatrix[1])):
             if itemCode1 == itemCode0:
                 flagItem = True
     if not flagProject:  # 处理预算中有该分项代码但明细中没有
-        temp = ["-", nameToMatrix[1][j][1], "-", "-", "-", "-", "-", "-", projectCode1, "-", "-"]
+        temp = [nameToMatrix[1][j][0], nameToMatrix[1][j][1], "-", "-", "-", "-", "-", "-", projectCode1, "-", "-"]
         temp.extend(nameToMatrix[1][j])
         tempMatrix.append(temp)
     else:
         if not flagItem:  # 处理预算中有该分项名称但明细中没有
-            temp = ["-", nameToMatrix[1][j][1], "-", "-", "-", "-", "-", "-", projectCode1, "-", "-"]
+            temp = [nameToMatrix[1][j][0], nameToMatrix[1][j][1], "-", "-", "-", "-", "-", "-", projectCode1, "-", "-"]
             temp.extend(nameToMatrix[1][j])
             tempMatrix.append(temp)
 nameToMatrix[0].extend(tempMatrix)
@@ -90,7 +106,7 @@ for i in range(len(nameToMatrix[0])):
     finalTable[i + 1].append(nameToMatrix[0][i][8])  # 项目代码
     finalTable[i + 1].append(nameToMatrix[0][i][1])  # 分项名称
     finalTable[i + 1].append(nameToMatrix[0][i][0])  # 原分项代码
-    finalTable[i + 1].append('new_xxx')  # 新分项代码
+    finalTable[i + 1].append(codeChange(nameToMatrix[0][i][0], codeChangeDictionary))  # 新分项代码
     finalTable[i + 1].append(nameToMatrix[0][i][13])  # 预算数
     finalTable[i + 1].append(nameToMatrix[0][i][15])  # 历年累计支出(不含借款)
     finalTable[i + 1].append(nameToMatrix[0][i][16])  # 余额
@@ -99,7 +115,7 @@ for i in range(len(nameToMatrix[0])):
     finalTable[i + 1].append(nameToMatrix[0][i][4])  # 报销内容
     finalTable[i + 1].append(nameToMatrix[0][i][6])  # 金额
     finalTable[i + 1].append('-')  # 报销金额占总支出比
-file = xlwt.Workbook()
+file = Workbook()
 table = file.add_sheet('ceshi', cell_overwrite_ok=True)
 for i in range(len(finalTable)):
     for j in range(len(finalTable[0])):
