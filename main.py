@@ -3,7 +3,6 @@ import xlrd
 import xlwt
 import getpass
 import os
-import sys
 
 user = getpass.getuser()
 # tablePath = 'C:/Users/' + user + '/Desktop/tables/'
