@@ -4,6 +4,7 @@ import xlwt
 import getpass
 import os
 
+
 user = getpass.getuser()
 # tablePath = 'C:/Users/' + user + '/Desktop/tables/'
 tablePath = 'tables/'
