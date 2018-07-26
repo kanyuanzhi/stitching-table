@@ -2,6 +2,7 @@
 *.xls
 *.xlsx
 tables
+three_tables
 two_tables
 mxtables
 build

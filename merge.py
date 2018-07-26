@@ -13,7 +13,7 @@ def codeChange(itemCode, dictionary):
 
 
 user = getuser()
-tablePath = 'C:/Users/' + user + '/Desktop/two_tables/'
+tablePath = 'C:/Users/' + user + '/Desktop/three_tables/'
 # tablePath = 'two_tables/'
 fileNames = listdir(tablePath)
 
@@ -35,9 +35,9 @@ for i in range(rows_count - 1):
 codeChangeKey = []
 codeChangeValue = []
 for row in codeChangeTable:
-    codeChangeKey.append(row[0])
-    codeChangeValue.append(row[2])
-
+    if row[2] != '':
+        codeChangeKey.append(row[1])
+        codeChangeValue.append(row[2])
 codeChangeDictionary = dict(zip(codeChangeKey, codeChangeValue))
 
 ################################
@@ -106,7 +106,7 @@ for i in range(len(nameToMatrix[0])):
     finalTable[i + 1].append(nameToMatrix[0][i][8])  # 项目代码
     finalTable[i + 1].append(nameToMatrix[0][i][1])  # 分项名称
     finalTable[i + 1].append(nameToMatrix[0][i][0])  # 原分项代码
-    finalTable[i + 1].append(codeChange(nameToMatrix[0][i][0], codeChangeDictionary))  # 新分项代码
+    finalTable[i + 1].append(codeChange(nameToMatrix[0][i][1], codeChangeDictionary))  # 新分项代码
     finalTable[i + 1].append(nameToMatrix[0][i][13])  # 预算数
     finalTable[i + 1].append(nameToMatrix[0][i][15])  # 历年累计支出(不含借款)
     finalTable[i + 1].append(nameToMatrix[0][i][16])  # 余额

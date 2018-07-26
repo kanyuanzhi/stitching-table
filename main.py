@@ -4,10 +4,9 @@ import xlwt
 import getpass
 import os
 
-
 user = getpass.getuser()
-# tablePath = 'C:/Users/' + user + '/Desktop/tables/'
-tablePath = 'tables/'
+tablePath = 'C:/Users/' + user + '/Desktop/tables/'
+# tablePath = 'tables/'
 fileNames = os.listdir(tablePath)
 tableNames = []
 
@@ -64,4 +63,4 @@ table = file.add_sheet('ceshi', cell_overwrite_ok=True)
 for i in range(len(finalMatrix)):
     for j in range(len(finalMatrix[0])):
         table.write(i, j, finalMatrix[i][j])
-file.save('result.xls')
+file.save('C:/Users/' + user + '/Desktop/result.xls')
